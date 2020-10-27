@@ -29,7 +29,7 @@ isAdjacent b c c' = c' `elem` getAdjacents b c
 
 
 move :: Board -> Integer -> Coord -> Board
-move b v' k = Board {fixedSet=(fixedSet b), fixedCoords=(fixedCoords b), matrix=(Map.adjust (\(v, flag) -> (v', True)) k (matrix b))}
+move b v' k = Board {fixedCoords=(fixedCoords b), matrix=(Map.adjust (\(v, flag) -> (v', True)) k (matrix b))}
 
 
 getMaybe :: Maybe a -> a

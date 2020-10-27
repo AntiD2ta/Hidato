@@ -18,8 +18,7 @@ import qualified Data.Set as Set
 type Coord = (Integer, Integer)
 type Cell = (Integer, Bool)
 
-data Board = Board { fixedSet :: Set.Set Integer
-                   , fixedCoords :: Map.Map Integer Coord
+data Board = Board { fixedCoords :: Map.Map Integer Coord
                    , matrix :: Map.Map Coord Cell
                    } deriving (Show, Eq)
 
@@ -28,7 +27,7 @@ buildBoard :: [[Integer]] -> Board
 buildBoard l = let matrix = buildMatrix l
                    fixedSet = buildFixedSet l
                    fixedCoords = buildFixedCoords fixedSet matrix
-                in Board {fixedSet=fixedSet, fixedCoords=fixedCoords, matrix=matrix}
+                in Board {fixedCoords=fixedCoords, matrix=matrix}
 
 
 buildMatrix :: [[Integer]] -> Map.Map Coord Cell
@@ -53,11 +52,6 @@ buildFixedCoords s b = Map.fromList $ reverse listMapped
     where getPairs = Map.filterWithKey (\k v -> Set.member (fst v) s) b
           mapToList = Map.toList getPairs
           listMapped = map (\(p, (n, _)) -> (n, p)) mapToList
-
-
--- Not needed using only getFixedCoord
-isFixed :: Board -> Integer -> Bool
-isFixed b x = Set.member x (fixedSet b)
 
 
 getFixedCoord :: Board -> Integer -> Maybe Coord
