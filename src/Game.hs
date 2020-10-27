@@ -13,16 +13,18 @@ tryMove :: Board -> Coord -> Bool -> Coord -> Bool
 tryMove b (k1, k2) t (d1, d2) = case Map.lookup (k1 + d1, k2 + d2) (matrix b) of Nothing -> False
                                                                                  Just c  -> not (snd c) || t
 
+
+sumCoords :: Coord -> Coord -> Coord
+sumCoords (x, y) (x', y') = (x + x', y + y')
+
+
 getAdjacents :: Board -> Coord -> [Coord]
-getAdjacents b k = filter (tryMove b k True) directions
+getAdjacents b k = map (sumCoords k) $ filter (tryMove b k True) directions
 
 
 getEmptyAdjacents :: Board -> Coord -> [Coord]
-getEmptyAdjacents b k = map sumCoords $ filter (tryMove b k False) directions
-    where x = fst k
-          y = snd k
-          sumCoords (x', y') = (x + x', y + y')
-
+getEmptyAdjacents b k = map (sumCoords k) $ filter (tryMove b k False) directions
+          
 
 isAdjacent :: Board -> Coord -> Coord -> Bool
 isAdjacent b c c' = c' `elem` getAdjacents b c
@@ -36,23 +38,24 @@ getMaybe :: Maybe a -> a
 getMaybe (Just x) = x
 
 
-getSol :: Integer -> [[Board]] -> [Board]
-getSol _ [] = []
-getSol n (x:xs)
-    | checkSol x n = x
-    | otherwise = getSol n xs
+-- getSol :: Board -> [Board] -> Board
+-- getSol b _ [] = b
+-- getSol b (x:xs)
+--     | checkSol x n = x
+--     | otherwise = getSol b n xs
 
 
-checkSol :: [Board] -> Integer -> Bool
-checkSol [] _ = False
-checkSol (b:bs) x = maxCell == x
-    where maxCell = lookupMax (fixedCoords b)
+checkSol :: Board -> Bool
+checkSol b = lenTable == full
+    where table    = matrix b
+          full      = Map.foldl (\acc (n, _) -> if n /= 0 then acc + 1 else acc) 0 table
+          lenTable = length $ Map.assocs table
 
 
 backtrack :: Board -> Coord -> Integer -> [Board]
 backtrack b c x
-    | fixed /= Nothing = if isAdjacent b c fixed' then backtrack (move b x fixed') fixed' (x + 1) else [b]
-    | not $ null empty = getSol x $ map (\c' -> backtrack (move b x c') c' (x + 1)) empty
+    | fixed /= Nothing = if isAdjacent b c fixed' then backtrack b fixed' (x + 1) else []
+    | not $ null empty = concatMap (\c' -> backtrack (move b x c') c' (x + 1)) empty
     | otherwise = [b]
     where fixed   = getFixedCoord b x
           fixed'  = if fixed == Nothing then (-1,-1) else getMaybe fixed
@@ -60,11 +63,12 @@ backtrack b c x
 
 
 pipeline :: [Board]
-pipeline = backtrack b start 2
+pipeline = filter (checkSol) sols
     where start = getStartCoord b
-          b = buildBoard getBoard
+          b     = buildBoard getBoard
+          sols  = backtrack b start 2
 
 
-compareWithHead :: (Eq a) => a -> [a] -> Bool
-compareWithHead _ [] = False
-compareWithHead y (x:xs) = x /= y
+-- compareWithHead :: (Eq a) => a -> [a] -> Bool
+-- compareWithHead _ [] = False
+-- compareWithHead y (x:xs) = x /= y
