@@ -23,3 +23,5 @@ cabal.project.local~
 .ghc.environment.*
 
 test.hs
+
+bin/
