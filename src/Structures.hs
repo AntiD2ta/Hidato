@@ -78,11 +78,12 @@ getSpace n
 
 
 getMatrixToStr :: Board -> String
-getMatrixToStr b = unlines $ map concat getRows
+getMatrixToStr b = unlines (map concat getRows) ++ "\n"
     where table    = matrix b 
           pairs    = Map.assocs table
           getRow x = map (\((_,_), (n,_)) -> show n ++ getSpace n ) $ filter (\((r,_), (_,_)) -> r == x) pairs
           top      = fst $ lookupMax table 
           getRows  = foldr (\x acc -> getRow x:acc) [] [0..top]
+
 
 getBoard = [[12,0,0,24,25], [0,10,16,0,0], [0,7,1,0,0], [6,0,18,0,0], [0,0,0,0,0]]
