@@ -3,5 +3,6 @@ import Structures
 import System.IO 
 
 main = do b <- return(pipeline)
-          print(b)
+          sequence $ map (\b' -> putStr (getMatrixToStr b')) b
+          print(length b)
           --putStr (getMatrixToStr b)

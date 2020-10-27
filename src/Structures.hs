@@ -24,8 +24,8 @@ data Board = Board { fixedCoords :: Map.Map Integer Coord
 
 
 buildBoard :: [[Integer]] -> Board
-buildBoard l = let matrix = buildMatrix l
-                   fixedSet = buildFixedSet l
+buildBoard l = let matrix      = buildMatrix l
+                   fixedSet    = buildFixedSet l
                    fixedCoords = buildFixedCoords fixedSet matrix
                 in Board {fixedCoords=fixedCoords, matrix=matrix}
 
@@ -49,8 +49,8 @@ buildFixedSet l = Set.fromList $ concat $ map (\l' -> nonZero l') l
 
 buildFixedCoords :: Set.Set Integer -> Map.Map Coord Cell -> Map.Map Integer Coord
 buildFixedCoords s b = Map.fromList $ reverse listMapped
-    where getPairs = Map.filterWithKey (\k v -> Set.member (fst v) s) b
-          mapToList = Map.toList getPairs
+    where getPairs   = Map.filterWithKey (\k v -> Set.member (fst v) s) b
+          mapToList  = Map.toList getPairs
           listMapped = map (\(p, (n, _)) -> (n, p)) mapToList
 
 
@@ -73,7 +73,7 @@ lookupMin m = head $ Map.keys m
 
 getSpace :: (Num a, Ord a) => a -> String
 getSpace n
-    | n < 10 = "  "
+    | n < 10    = "  "
     | otherwise = " "
 
 
