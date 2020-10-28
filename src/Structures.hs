@@ -79,6 +79,7 @@ lookupMin m = head $ Map.keys m
 
 getSpace :: (Num a, Ord a) => a -> String
 getSpace n
+    | n == -1   = "   "
     | n < 10    = "  "
     | otherwise = " "
 
@@ -87,7 +88,7 @@ getMatrixToStr :: Board -> String
 getMatrixToStr b = unlines (map concat getRows) ++ "\n"
     where table    = matrix b 
           pairs    = Map.assocs table
-          getRow x = map (\((_,_), (n,_)) -> show n ++ getSpace n ) $ filter (\((r,_), (_,_)) -> r == x) pairs
+          getRow x = map (\((_,_), (n,_)) -> if n == -1 then getSpace n else show n ++ getSpace n ) $ filter (\((r,_), (_,_)) -> r == x) pairs
           top      = fst $ lookupMax table 
           getRows  = foldr (\x acc -> getRow x:acc) [] [0..top]
 
@@ -105,13 +106,14 @@ getStringToTable input
 
 checkTable :: [[Integer]] -> Bool
 checkTable t = getMax == numCells
-    where getMax   = fromInteger $ foldl (\acc x -> if maximum x > acc then maximum x else acc) 0 t
-          numCells = foldl (\acc x -> acc + length x) 0 t
+    where getMax    = fromInteger $ foldl (\acc x -> if maximum x > acc then maximum x else acc) 0 t
+          length' x = length $ filter (-1 /=) x
+          numCells  = foldl (\acc x -> acc + length' x) 0 t
 
 
 getMaybeInt :: Maybe Integer -> Integer
-getMaybeInt Nothing = 0
-getMaybeInt (Just n) = n
+getMaybeInt Nothing = -1
+getMaybeInt (Just n) = if n >= 0 then n else 0
 
 
 easy = [[12,0,0,24,25],
