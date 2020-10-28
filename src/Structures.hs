@@ -7,6 +7,7 @@ module Structures
   getStartCoord,
   lookupMax,
   getMatrixToStr,
+  getStringToTable,
   ladder,
   easy,
   normal,
@@ -16,6 +17,7 @@ module Structures
 
 --import Data.Map((!))
 import Data.Char
+import Text.Read
 import qualified Data.Map as Map
 import qualified Data.Set as Set  
 
@@ -91,6 +93,27 @@ getMatrixToStr b = unlines (map concat getRows) ++ "\n"
 
 
 -- //TODO: Print a message error in main instead or raising error. Return ([[Integer]], Bool)
+getStringToTable :: String -> [[Integer]]
+getStringToTable input
+    | check     = table
+    | otherwise = error("Invalid input")
+    where rawRows       = lines input
+          readInteger x = getMaybeInt $ readMaybe x :: Integer
+          table         = map (map readInteger) $ map words rawRows
+          check         = checkTable table
+          
+
+checkTable :: [[Integer]] -> Bool
+checkTable t = getMax == numCells
+    where getMax   = fromInteger $ foldl (\acc x -> if maximum x > acc then maximum x else acc) 0 t
+          numCells = foldl (\acc x -> acc + length x) 0 t
+
+
+getMaybeInt :: Maybe Integer -> Integer
+getMaybeInt Nothing = 0
+getMaybeInt (Just n) = n
+
+
 easy = [[12,0,0,24,25],
         [0,10,16,0,0],
         [0,7,1,0,0],
