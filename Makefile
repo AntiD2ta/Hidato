@@ -1,7 +1,7 @@
 .DEFAULT_GOAL 	:= help
 
 build: ## Build project
-	@echo "Compiling..." && ghc -o bin/hidato ./Main.hs src/Structures.hs src/Game.hs 
+	@echo "Compiling..." && ghc -o bin/hidato ./Main.hs src/Structures.hs src/Game.hs src/Generator.hs
 
 run: ## Run project
 	@bin/hidato
