@@ -3,6 +3,7 @@ module Structures
   Coord,
   Cell,
   buildBoard,
+  buildFixedCoords,
   getFixedCoord,
   getStartCoord,
   lookupMax,
@@ -15,9 +16,10 @@ module Structures
   insane
 ) where
 
---import Data.Map((!))
 import Data.Char
+import Data.List
 import Text.Read
+import System.Random
 import qualified Data.Map as Map
 import qualified Data.Set as Set  
 
@@ -50,7 +52,7 @@ buildRow l r c
 
 buildFixedSet :: [[Integer]] -> Set.Set Integer
 buildFixedSet l = Set.fromList $ concat $ map (\l' -> nonZero l') l
-    where nonZero = filter (\x -> x /= 0)
+    where nonZero = filter (\x -> x > 0)
 
 
 buildFixedCoords :: Set.Set Integer -> Map.Map Coord Cell -> Map.Map Integer Coord
@@ -73,6 +75,7 @@ getStartCoord b = case Map.lookup 1 dict of Nothing -> (-1, -1)
 lookupMax :: (Ord k) => Map.Map k a -> k
 lookupMax m = last $ Map.keys m
 
+
 lookupMin :: (Ord k) => Map.Map k a -> k
 lookupMin m = head $ Map.keys m
 
@@ -85,12 +88,14 @@ getSpace n
 
 
 getMatrixToStr :: Board -> String
-getMatrixToStr b = unlines (map concat getRows) ++ "\n"
+getMatrixToStr b = unlines (map concat delRows) ++ "\n" ++ sep ++ "\n" ++ "\n"
     where table    = matrix b 
           pairs    = Map.assocs table
           getRow x = map (\((_,_), (n,_)) -> if n == -1 then getSpace n else show n ++ getSpace n ) $ filter (\((r,_), (_,_)) -> r == x) pairs
           top      = fst $ lookupMax table 
           getRows  = foldr (\x acc -> getRow x:acc) [] [0..top]
+          delRows  = filter (\x -> length x /= (foldl (\acc s -> if s == "   " then acc + 1 else acc) 0 x)) getRows
+          sep      = concat $ take 40 $ repeat "#"
 
 
 -- //TODO: Print a message error in main instead or raising error. Return ([[Integer]], Bool)

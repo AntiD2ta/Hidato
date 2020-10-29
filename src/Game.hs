@@ -1,5 +1,8 @@
 module Game
-( pipeline
+( pipeline,
+  directions,
+  getEmptyAdjacents,
+  move
 ) where
 
 import Structures
