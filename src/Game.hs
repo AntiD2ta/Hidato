@@ -1,5 +1,6 @@
 module Game
-( pipeline,
+( 
+  pipeline,
   directions,
   getEmptyAdjacents,
   move
@@ -41,13 +42,6 @@ getMaybe :: Maybe a -> a
 getMaybe (Just x) = x
 
 
--- getSol :: Board -> [Board] -> Board
--- getSol b _ [] = b
--- getSol b (x:xs)
---     | checkSol x n = x
---     | otherwise = getSol b n xs
-
-
 checkSol :: Board -> Bool
 checkSol b = lenTable == full
     where table    = matrix b
@@ -65,13 +59,7 @@ backtrack b c x
           empty   = getEmptyAdjacents b c
 
 
-pipeline :: [Board]
-pipeline = filter (checkSol) sols
+pipeline :: Board -> [Board]
+pipeline b = filter (checkSol) sols
     where start = getStartCoord b
-          b     = buildBoard getBoard
           sols  = backtrack b start 2
-
-
--- compareWithHead :: (Eq a) => a -> [a] -> Bool
--- compareWithHead _ [] = False
--- compareWithHead y (x:xs) = x /= y

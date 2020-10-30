@@ -19,8 +19,8 @@ genCoord top gen = ((x, y), gen'')
           (y, gen'') = randomR (0, top) gen'
 
 
-getRandomBoard :: StdGen -> Board
-getRandomBoard gen = filterBoard genBoard
+getRandomBoard :: StdGen -> (Board, StdGen)
+getRandomBoard gen = (filterBoard genBoard, gen'')
     where (top, gen')    = randomR (1, 20) gen
           top'           = toInteger top
           (start, gen'') = genCoord top' gen'

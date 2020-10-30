@@ -1,5 +1,6 @@
 module Structures
-( Board(..),
+( 
+  Board(..),
   Coord,
   Cell,
   buildBoard,
@@ -102,7 +103,7 @@ getMatrixToStr b = unlines (map concat delRows) ++ "\n" ++ sep ++ "\n" ++ "\n"
 getStringToTable :: String -> [[Integer]]
 getStringToTable input
     | check     = table
-    | otherwise = error("Invalid input")
+    | otherwise = []
     where rawRows       = lines input
           readInteger x = getMaybeInt $ readMaybe x :: Integer
           table         = map (map readInteger) $ map words rawRows
