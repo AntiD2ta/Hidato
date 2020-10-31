@@ -40,11 +40,34 @@ getInput l = do
                         getInput $ l ++ line ++ "\n"
 
 
-manageOptions :: StdGen -> String -> (IO (Board), StdGen)
+manageOptions :: StdGen -> String -> IO (Board)
 manageOptions gen opt = do
-                          case opt of "1" -> (input "", gen)
-                                      "2" -> (return(buildBoard [[1]]), gen)
-                                      "3" -> let (b, gen') = getRandomBoard gen in (return (b), gen')
+                          case opt of "1" -> input ""
+                                      "2" -> randomBoard gen
+                                      _   -> return(buildBoard [[1]])
+
+
+getMaybeDif :: Maybe Integer -> Integer
+getMaybeDif Nothing = 0
+getMaybeDif (Just x) = x
+
+
+randomBoard :: StdGen -> IO (Board)
+randomBoard gen = do putStrLn ("Insert one of the following difficulties. The difficulty is related to the number of white cells.")
+                     putStrLn ("Or press enter to go with normal difficulty\n")
+                     mapM_ putStrLn displayDif
+                     dif <- getLine
+                     if dif == "" 
+                          then do
+                              let b = getRandomBoard gen 40 in return (b)
+                          else do
+                              let dif' = getMaybeDif $ lookup dif difficulty
+                              if dif' == 0
+                                  then do
+                                      putStrLn ("Invalid difficulty. Try again\n")
+                                      randomBoard gen
+                                  else do
+                                      let b = getRandomBoard gen dif' in return (b)
 
 
 displaySols :: [Board] -> IO ()
@@ -66,13 +89,17 @@ console gen = do
                 mapM_ putStrLn options
                 putStr ("\n")
                 opt <- getLine
-                let (ioB, gen') = manageOptions gen opt
+                let ioB = manageOptions gen opt
                 b <- ioB
+                when (b == buildBoard [[1]]) $ do
+                    putStrLn ("Invalid option\n")
+                    console gen
                 putStr (getMatrixToStr b)
                 sols <- return(pipeline b) 
                 let numSols = show $ length sols
                 putStr ("This board have " ++ numSols ++ " solutions\n")
                 displaySols sols
+                gen' <- newStdGen
                 console gen'
 
 main :: IO ()

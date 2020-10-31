@@ -19,24 +19,24 @@ genCoord top gen = ((x, y), gen'')
           (y, gen'') = randomR (0, top) gen'
 
 
-getRandomBoard :: StdGen -> (Board, StdGen)
-getRandomBoard gen = (filterBoard genBoard, gen'')
-    where (top, gen')    = randomR (1, 20) gen
+getRandomBoard :: StdGen -> Integer -> Board
+getRandomBoard gen dif = filterBoard genBoard
+    where (top, gen')    = randomR (1, 15) gen
           top'           = toInteger top
           (start, gen'') = genCoord top' gen'
           table          = buildRectangle top top
           rawBoard       = buildBoard table
-          genBoard       = walkRandom gen'' start 1 rawBoard
+          genBoard       = walkRandom gen'' start 1 dif rawBoard
 
 
-walkRandom :: StdGen -> Coord -> Integer -> Board -> Board
-walkRandom gen c x b
+walkRandom :: StdGen -> Coord -> Integer -> Integer -> Board -> Board
+walkRandom gen c x dif b
     | null empty = move b (x - 1) c
-    | erase      = walkRandom gen'' c' (x + 1) $ move b (-2) c'
-    | otherwise  = walkRandom gen'' c' (x + 1) $ move b x c'
+    | erase      = walkRandom gen'' c' (x + 1) dif $ move b (-2) c'
+    | otherwise  = walkRandom gen'' c' (x + 1) dif $ move b x c'
     where empty           = getEmptyAdjacents b c
           (c', gen')      = randomDir gen empty
-          (erase', gen'') = uniform gen' 60
+          (erase', gen'') = uniform gen' dif
           erase           = erase' && x /= 1
           
 

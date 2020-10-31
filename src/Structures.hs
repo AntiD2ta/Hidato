@@ -9,12 +9,7 @@ module Structures
   getStartCoord,
   lookupMax,
   getMatrixToStr,
-  getStringToTable,
-  ladder,
-  easy,
-  normal,
-  hard,
-  insane
+  getStringToTable
 ) where
 
 import Data.Char
@@ -99,7 +94,6 @@ getMatrixToStr b = unlines (map concat delRows) ++ "\n" ++ sep ++ "\n" ++ "\n"
           sep      = concat $ take 40 $ repeat "#"
 
 
--- //TODO: Print a message error in main instead or raising error. Return ([[Integer]], Bool)
 getStringToTable :: String -> [[Integer]]
 getStringToTable input
     | check     = table
@@ -120,45 +114,3 @@ checkTable t = getMax == numCells
 getMaybeInt :: Maybe Integer -> Integer
 getMaybeInt Nothing = -1
 getMaybeInt (Just n) = if n >= 0 then n else 0
-
-
-easy = [[12,0,0,24,25],
-        [0,10,16,0,0],
-        [0,7,1,0,0],
-        [6,0,18,0,0],
-        [0,0,0,0,0]]
-
-ladder = [[0],
-          [0, 8],
-          [0, 0, 11],
-          [29, 0, 10, 0],
-          [30, 0, 0, 0, 0],
-          [0, 31, 1, 38, 0, 0],
-          [0, 32, 0, 0, 39, 41, 0],
-          [0, 0, 0, 22, 0, 0, 42, 0],
-          [0, 0, 0, 0, 0, 0, 0, 44, 45]]
-
-insane = [[0,0,0,0,81,0,55,0,0],
-        [17,0,0,0,0,3,0,0,0],
-        [16,0,10,0,0,0,1,0,0],
-        [12,11,0,0,0,0,58,49,0],
-        [0,0,0,0,23,0,59,48,0],
-        [0,0,0,0,30,0,60,0,47],
-        [73,0,0,34,0,0,0,62,44],
-        [0,71,0,66,0,0,0,0,43],
-        [69,0,0,0,37,64,0,42,0] ]
-
-hard = [[0, 0, 49, 0, 0, 0, 34],
-          [0, 0, 0, 0, 31, 0, 0],
-          [0, 14, 0, 5, 29, 38, 0],
-          [0, 0, 4, 0, 0, 0, 0],
-          [0, 0, 16, 0, 0, 0, 22],
-          [0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 1, 19, 0, 0, 25]]
-
-normal = [[0, 12, 0, 0, 0, 36],
-        [0, 0, 0, 10, 0, 0],
-        [17, 0, 0, 0, 0, 0],
-        [0, 16, 23, 6, 0, 31],
-        [1, 0, 0, 0, 0, 29],
-        [0, 0, 4, 26, 0, 0]]
