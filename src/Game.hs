@@ -44,9 +44,9 @@ getMaybe (Just x) = x
 
 checkSol :: Board -> Bool
 checkSol b = lenTable == full
-    where table    = matrix b
+    where table     = matrix b
           full      = Map.foldl (\acc (n, _) -> if n /= 0 then acc + 1 else acc) 0 table
-          lenTable = length $ Map.assocs table
+          lenTable  = length $ Map.assocs table
 
 
 backtrack :: Board -> Coord -> Integer -> [Board]

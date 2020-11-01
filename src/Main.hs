@@ -16,6 +16,7 @@ input l = do
             putStrLn ("For white cells insert 0") 
             putStrLn ("For cells with numbers insert numbers")
             putStrLn ("Any other character different of a number greater or equal than 0, will not be considered a cell in the Hidato board")
+            putStrLn ("You must always complete a rectangule")
             putStr ("Press enter when you finish\n\n")
             putStr ("Example of a board inserted by input:\n\n")
             putStrLn example

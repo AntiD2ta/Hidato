@@ -36,7 +36,7 @@ walkRandom gen c x dif b
     | otherwise  = walkRandom gen'' c' (x + 1) dif $ move b x c'
     where empty           = getEmptyAdjacents b c
           (c', gen')      = randomDir gen empty
-          (erase', gen'') = uniform gen' dif
+          (erase', gen'') = bernoulli gen' dif
           erase           = erase' && x /= 1
           
 
@@ -56,6 +56,6 @@ filterBoard b = Board {fixedCoords=(fixedCoords), matrix=(cleanErasedNums)}
           fixedCoords      = buildFixedCoords fixedSet cleanErasedNums
           
 
-uniform :: StdGen -> Integer -> (Bool, StdGen)
-uniform gen d = (u <= d, newGen)
+bernoulli :: StdGen -> Integer -> (Bool, StdGen)
+bernoulli gen d = (u <= d, newGen)
     where (u, newGen) = randomR (0, 100) gen
