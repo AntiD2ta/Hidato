@@ -10,7 +10,7 @@ module Strings
 
 
 intro = "Welcome to Hidato solver!!! \n\nPress Ctrl+D anytime to exit\n"
-please = "Please select an option: \n"
+please = "Please insert the number of an option: \n"
 options = ["1-) Write an Hidato to be solved",
            "2-) Generate a random Hidato"]
 displayDif = ["pie",

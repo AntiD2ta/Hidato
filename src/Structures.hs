@@ -48,7 +48,7 @@ buildRow l r c
 
 buildFixedSet :: [[Integer]] -> Set.Set Integer
 buildFixedSet l = Set.fromList $ concat $ map (\l' -> nonZero l') l
-    where nonZero = filter (\x -> x > 0)
+    where nonZero = filter (>0)
 
 
 buildFixedCoords :: Set.Set Integer -> Map.Map Coord Cell -> Map.Map Integer Coord
