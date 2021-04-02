@@ -41,7 +41,7 @@ The indications to give the program a Hidato to be solved or generate it, are sh
 
 ## Author ✒️
 
-* **Miguel Tenorio Potrony** -- [stdevAntiD2ta](https://github.com/stdevAntiD2ta)
+* **Miguel Tenorio Potrony** -- [AntiD2ta](https://github.com/AntiD2ta)
 
 ## License 📄
 
